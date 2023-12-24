@@ -34,7 +34,10 @@ public class UsersGetAllServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * Обрабатывает HTTP GET запросы.
+     * Возвращает информацию обо всех пользователях в формате JSON.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {

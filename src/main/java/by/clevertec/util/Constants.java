@@ -16,4 +16,10 @@ public class Constants {
 
     }
 
+    @UtilityClass
+    public class Paths {
+        public static final String TEMPLATE_PDF = "/WEB-INF/classes/Clevertec_Template.pdf";
+        public static final String OUTPUT_PATH = "resources/";
+    }
+
 }
