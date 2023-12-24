@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable
     public UserDto getUser(int id) {
+
         return Optional.ofNullable(userDao.get(id)).map(userMapper::convertToDto).orElse(null);
     }
 
@@ -80,13 +81,18 @@ public class UserServiceImpl implements UserService {
     /**
      * Удаляет пользователя из базы данных.
      *
-     * @param userDto UserDto пользователя для удаления.
+     * @param id ID пользователя для удаления.
      */
+
     @Override
     @Cacheable
-    public void deleteUser(UserDto userDto) {
-        User user = userMapper.convertToEntity(userDto);
-        userDao.delete(user);
+    public void deleteUser(int id) {
+        User user = userDao.get(id);
+        if (user != null) {
+            userDao.delete(user);
+        } else {
+            throw new IllegalArgumentException("User with id " + id + " not found");
+        }
     }
 
 }
