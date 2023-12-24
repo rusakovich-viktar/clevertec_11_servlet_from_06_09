@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private UserMapper userMapper = new UserMapper();
-    //    private UserMapperMapStruct userMapper = Mappers.getMapper(UserMapperMapStruct.class);
     private UserDtoValidator userDtoValidator;
     private UserDao userDao;
 
