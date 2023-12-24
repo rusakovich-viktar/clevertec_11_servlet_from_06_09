@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @WebFilter(urlPatterns = "/*",
-           initParams = {@WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding params")})
+        initParams = {@WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding params")})
 public class EncodingFilter implements Filter {
 
     private String encoding;

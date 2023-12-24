@@ -42,13 +42,15 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Возвращает список всех пользователей в виде UserDto.
+     * Получает список пользователей с учетом пагинации.
      *
-     * @return Список всех пользователей в виде UserDto.
+     * @param page     Номер страницы, начиная с 0.
+     * @param pageSize Количество пользователей на странице.
+     * @return Список пользователей на указанной странице, преобразованный в DTO.
      */
     @Override
-    public List<UserDto> getAllUsers() {
-        List<User> users = userDao.getAll();
+    public List<UserDto> getAllUsers(int page, int pageSize) {
+        List<User> users = userDao.getAll(page, pageSize);
         return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 

@@ -38,7 +38,7 @@ public class UsersServlet extends HttpServlet {
      * Возвращает информацию о пользователе с указанным ID.
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String pathInfo = req.getPathInfo();
         if (pathInfo == null || pathInfo.equals("/")) {
@@ -69,7 +69,7 @@ public class UsersServlet extends HttpServlet {
      * Обновляет пользователя на основе данных, полученных в теле запроса.
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             UserDto newUser = objectMapper.readValue(req.getReader(), UserDto.class);
             userService.updateUser(newUser);
@@ -81,7 +81,7 @@ public class UsersServlet extends HttpServlet {
 
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String pathInfo = req.getPathInfo();
         if (pathInfo == null || pathInfo.equals("/")) {

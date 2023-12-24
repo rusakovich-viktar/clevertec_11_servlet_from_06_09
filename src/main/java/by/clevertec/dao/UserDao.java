@@ -6,7 +6,7 @@ import java.util.List;
 public interface UserDao {
     User get(int id);
 
-    List<User> getAll();
+    List<User> getAll(int page, int pageSize);
 
     User save(User user);
 

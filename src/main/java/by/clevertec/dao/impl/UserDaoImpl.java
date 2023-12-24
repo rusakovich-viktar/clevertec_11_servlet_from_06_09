@@ -44,14 +44,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * Возвращает список всех пользователей.
+     * Получает список пользователей с учетом пагинации.
      *
-     * @return Список всех пользователей.
+     * @param page     Номер страницы, начиная с 0.
+     * @param pageSize Количество пользователей на странице.
+     * @return Список пользователей на указанной странице.
      */
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(int page, int pageSize) {
         em.getTransaction().begin();
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class)
+                .setFirstResult(page * pageSize)
+                .setMaxResults(pageSize);
         List<User> users = query.getResultList();
         em.getTransaction().commit();
         return users;

@@ -34,19 +34,21 @@ public class UsersGetAllServlet extends HttpServlet {
 
     }
 
-    /**
-     * Обрабатывает HTTP GET запросы.
-     * Возвращает информацию обо всех пользователях в формате JSON.
-     */
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            List<UserDto> users = userService.getAllUsers();
+            int page = req.getParameter("page") != null ? Integer.parseInt(req.getParameter("page")) : 0;
+            int pageSize = req.getParameter("pageSize") != null ? Integer.parseInt(req.getParameter("pageSize")) : 20;
+
+            List<UserDto> users = userService.getAllUsers(page, pageSize);
             String content = objectMapper.writeValueAsString(users);
+
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(content);
         } catch (Exception e) {
+
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("An error occurred while processing your request: " + e.getMessage());
         }
