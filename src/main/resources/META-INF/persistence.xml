@@ -8,7 +8,7 @@
         <class>by.clevertec.entity.User</class>
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action"
-                      value="drop-and-create" />
+                      value="none" />
             <property name="jakarta.persistence.provider"
                       value="org.hibernate.jpa.HibernatePersistenceProvider" />
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
