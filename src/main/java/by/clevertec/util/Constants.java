@@ -11,8 +11,9 @@ public class Constants {
     }
 
     @UtilityClass
-    public class Paths {
-        public static final String TEMPLATE_PDF = "app/src/main/resources/Clevertec_Template.pdf";
-        public static final String OUTPUT_PATH = "app/src/main/resources/";
+    public class Messages {
+        public static final String ERROR_READING_PROPERTY_FROM_APPLICATION_YML = "Error reading property from application.yml";
+
     }
+
 }

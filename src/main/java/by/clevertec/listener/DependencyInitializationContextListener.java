@@ -4,7 +4,9 @@ package by.clevertec.listener;
 import by.clevertec.dao.UserDao;
 import by.clevertec.dao.impl.UserDaoImpl;
 import by.clevertec.mapper.UserMapper;
+import by.clevertec.service.DatabaseMigrationService;
 import by.clevertec.service.UserService;
+import by.clevertec.service.impl.DatabaseMigrationServiceImpl;
 import by.clevertec.service.impl.UserServiceImpl;
 import by.clevertec.validation.UserDtoValidator;
 import jakarta.servlet.ServletContextEvent;
@@ -30,5 +32,7 @@ public class DependencyInitializationContextListener implements ServletContextLi
         UserDao userDao = new UserDaoImpl();
         UserService userService = new UserServiceImpl(userMapper, validator, userDao);
         sce.getServletContext().setAttribute("userService", userService);
+        DatabaseMigrationService databaseMigrationService = new DatabaseMigrationServiceImpl();
+        sce.getServletContext().setAttribute("migrationService", databaseMigrationService);
     }
 }
