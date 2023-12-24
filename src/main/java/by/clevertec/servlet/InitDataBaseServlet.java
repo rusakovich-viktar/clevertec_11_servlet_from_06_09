@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(value = "/db")
-public class GetUsersServlet extends HttpServlet {
+public class InitDataBaseServlet extends HttpServlet {
 
     private DatabaseMigrationService migrationService;
 
