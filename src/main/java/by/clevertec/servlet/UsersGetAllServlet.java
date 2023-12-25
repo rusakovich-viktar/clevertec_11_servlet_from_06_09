@@ -1,5 +1,9 @@
 package by.clevertec.servlet;
 
+import static by.clevertec.util.Constants.Attributes.APPLICATION_JSON;
+import static by.clevertec.util.Constants.Attributes.PAGE;
+import static by.clevertec.util.Constants.Attributes.PAGE_SIZE;
+
 import by.clevertec.dto.UserDto;
 import by.clevertec.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,21 +45,19 @@ public class UsersGetAllServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            int page = req.getParameter("page") != null ? Integer.parseInt(req.getParameter("page")) : 0;
-            int pageSize = req.getParameter("pageSize") != null ? Integer.parseInt(req.getParameter("pageSize")) : 20;
+            int page = req.getParameter(PAGE) != null ? Integer.parseInt(req.getParameter(PAGE)) : 0;
+            int pageSize = req.getParameter(PAGE_SIZE) != null ? Integer.parseInt(req.getParameter(PAGE_SIZE)) : 20;
 
             List<UserDto> users = userService.getAllUsers(page, pageSize);
             String content = objectMapper.writeValueAsString(users);
 
-            resp.setContentType("application/json");
+            resp.setContentType(APPLICATION_JSON);
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(content);
         } catch (Exception e) {
-
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("An error occurred while processing your request: " + e.getMessage());
         }
     }
-
 
 }

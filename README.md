@@ -14,7 +14,9 @@ Tasks
 2. Выносим war в build/libs/demo1-1.0-SNAPSHOT.war (тестировался на 10.1.8)
 3. Запускаем контейнер сервлетов Tomcat.
 
+Нюансы:
 4. После запуска для разворачивания базы через flyway migration запускаем эндпоинт /db, например http://localhost:8080/db
 Таким образом создастся таблица и заполнится значениями из скриптов лежащих в resources/db/migration
+5. В resources/servletUser.postman_collection.json находится Export команд из Postman, для упрощения тестирования приложения
 
 

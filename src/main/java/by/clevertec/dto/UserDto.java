@@ -1,6 +1,9 @@
 package by.clevertec.dto;
 
 import static by.clevertec.util.Constants.Attributes.PHONE_PATTERN;
+import static by.clevertec.util.Constants.Messages.ENTER_PHONE_NUMBER;
+import static by.clevertec.util.Constants.Messages.INCORRECT_EMAIL_FORMAT;
+import static by.clevertec.util.Constants.Messages.NAME_SHOULD_NOT_BE_MORE_30_CHARACTER;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -20,12 +23,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
+
     private int id;
     @NotNull
-    @Size(min = 1, max = 30, message = "Name should not be more 30 character")
+    @Size(min = 1, max = 30, message = NAME_SHOULD_NOT_BE_MORE_30_CHARACTER)
     private String name;
-    @Email(message = "Неверный формат электронной почты")
+    @Email(message = INCORRECT_EMAIL_FORMAT)
     private String email;
-    @Pattern(regexp = PHONE_PATTERN, message = "Введите номер в международном формате: +375291234567")
+    @Pattern(regexp = PHONE_PATTERN, message = ENTER_PHONE_NUMBER)
     private String phoneNumber;
 }

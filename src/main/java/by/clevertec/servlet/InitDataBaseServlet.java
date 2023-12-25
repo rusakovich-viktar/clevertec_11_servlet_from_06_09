@@ -1,7 +1,9 @@
 package by.clevertec.servlet;
 
+import static by.clevertec.util.Constants.Messages.DATATABLE_NOT_CREATED;
 
 import by.clevertec.service.DatabaseMigrationService;
+import by.clevertec.util.Constants.Attributes;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,7 +20,7 @@ public class InitDataBaseServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init();
-        migrationService = (DatabaseMigrationService) config.getServletContext().getAttribute("migrationService");
+        migrationService = (DatabaseMigrationService) config.getServletContext().getAttribute(Attributes.MIGRATION_SERVICE);
 
     }
 
@@ -28,7 +30,7 @@ public class InitDataBaseServlet extends HttpServlet {
         if (success) {
             resp.setStatus(HttpServletResponse.SC_CREATED);
         } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "База данных не создана, исключение в migrationService.migrateDatabase(), так бывает, не расстраивайтесь");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, DATATABLE_NOT_CREATED);
         }
     }
 }

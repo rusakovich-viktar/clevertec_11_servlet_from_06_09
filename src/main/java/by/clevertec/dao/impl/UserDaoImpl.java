@@ -1,7 +1,10 @@
 package by.clevertec.dao.impl;
 
+import static by.clevertec.util.Constants.Messages.SAVE_USER_ERROR;
+
 import by.clevertec.dao.UserDao;
 import by.clevertec.entity.User;
+import by.clevertec.util.Constants.Messages;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -71,11 +74,10 @@ public class UserDaoImpl implements UserDao {
         try {
             em.persist(user);
         } catch (Exception e) {
-            log.error(("Ошибка при сохранении пользователя: " + e.getMessage()));
+            log.error(SAVE_USER_ERROR + e.getMessage());
         }
         return user;
     }
-
 
     /**
      * Обновляет пользователя в базе данных.

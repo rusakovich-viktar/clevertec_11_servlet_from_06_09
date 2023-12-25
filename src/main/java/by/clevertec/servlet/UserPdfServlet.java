@@ -1,10 +1,19 @@
 package by.clevertec.servlet;
 
+import static by.clevertec.util.Constants.Attributes.APPLICATION_PDF;
+import static by.clevertec.util.Constants.Attributes.PAGE;
+import static by.clevertec.util.Constants.Attributes.PAGE_SIZE;
+import static by.clevertec.util.Constants.Attributes.UTF_8;
+import static by.clevertec.util.Constants.Messages.PRODUCT_NOT_EXIST;
+import static by.clevertec.util.Constants.Messages.НЕВЕРНЫЙ_ФОРМАТ_СТРАНИЦЫ_ИЛИ_РАЗМЕРА_СТРАНИЦЫ_НЕОБХОДИМО_ЗАДАТЬ_ОБА_ПАРАМЕТРА_PAGE_И_PAGE_SIZE;
+import static by.clevertec.util.Constants.Paths.WEB_INF_CLASSES_CLEVERTEC_TEMPLATE_PDF;
+
 import by.clevertec.dto.UserDto;
 import by.clevertec.pdf.PdfCanvas;
 import by.clevertec.pdf.impl.PdfCanvasImpl;
 import by.clevertec.service.UserService;
 import by.clevertec.service.impl.UserDocumentService;
+import by.clevertec.util.Constants.Messages;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import jakarta.servlet.ServletConfig;
@@ -23,6 +32,8 @@ import java.util.List;
  */
 @WebServlet(value = "/pdf")
 public class UserPdfServlet extends HttpServlet {
+
+
     private UserService userService;
 
     /**
@@ -53,22 +64,22 @@ public class UserPdfServlet extends HttpServlet {
         int page;
         int pageSize;
         try {
-            page = Integer.parseInt(req.getParameter("page"));
-            pageSize = Integer.parseInt(req.getParameter("pageSize"));
+            page = Integer.parseInt(req.getParameter(PAGE));
+            pageSize = Integer.parseInt(req.getParameter(PAGE_SIZE));
         } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Неверный формат страницы или размера страницы, необходимо задать оба параметра page и pageSize ");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, НЕВЕРНЫЙ_ФОРМАТ_СТРАНИЦЫ_ИЛИ_РАЗМЕРА_СТРАНИЦЫ_НЕОБХОДИМО_ЗАДАТЬ_ОБА_ПАРАМЕТРА_PAGE_И_PAGE_SIZE);
             return;
         }
 
         List<UserDto> users = userService.getAllUsers(page, pageSize);
         if (users.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Товар не существует");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, PRODUCT_NOT_EXIST);
             return;
         }
 
         UserDocumentService documentService = new UserDocumentService(users);
 
-        try (InputStream templateStream = req.getServletContext().getResourceAsStream("/WEB-INF/classes/Clevertec_Template.pdf");
+        try (InputStream templateStream = req.getServletContext().getResourceAsStream(WEB_INF_CLASSES_CLEVERTEC_TEMPLATE_PDF);
              ServletOutputStream outputStream = resp.getOutputStream()) {
 
             PdfReader reader = new PdfReader(templateStream);
@@ -80,13 +91,11 @@ public class UserPdfServlet extends HttpServlet {
             stamper.close();
             reader.close();
 
-            resp.setContentType("application/pdf");
-            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType(APPLICATION_PDF);
+            resp.setCharacterEncoding(UTF_8);
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
-            throw new ServletException("Ошибка при генерации PDF", e);
+            throw new ServletException(Messages.ОШИБКА_ПРИ_ГЕНЕРАЦИИ_PDF, e);
         }
     }
-
-
 }

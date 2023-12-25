@@ -5,7 +5,6 @@ import by.clevertec.service.DatabaseMigrationService;
 import by.clevertec.util.YamlReader;
 import org.flywaydb.core.Flyway;
 
-
 /**
  * Implementation of the {@link DatabaseMigrationService} interface that provides database migration services.
  */
