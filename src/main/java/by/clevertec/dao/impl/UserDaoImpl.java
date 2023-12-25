@@ -8,16 +8,18 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Реализация интерфейса UserDao.
  * Предоставляет базовые CRUD операции (создание, чтение, обновление, удаление) для пользователей.
  */
+@Log4j2
 @ToString
 public class UserDaoImpl implements UserDao {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("by.clevertec.persist");
-    private EntityManager em;
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("by.clevertec.persist");
+    private final EntityManager em;
 
     /**
      * Конструктор класса UserDaoImpl.
@@ -61,13 +63,15 @@ public class UserDaoImpl implements UserDao {
      * @param user Пользователь для сохранения.
      * @return Сохраненный пользователь.
      */
-    @Override
     public User save(User user) {
-        em.getTransaction().begin();
-        em.persist(user);
-        em.getTransaction().commit();
+        try {
+            em.persist(user);
+        } catch (Exception e) {
+            log.error(("Ошибка при сохранении пользователя: " + e.getMessage()));
+        }
         return user;
     }
+
 
     /**
      * Обновляет пользователя в базе данных.

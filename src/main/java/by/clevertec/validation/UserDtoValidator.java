@@ -3,6 +3,7 @@ package by.clevertec.validation;
 import by.clevertec.dto.UserDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
+import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import java.util.Set;
@@ -37,9 +38,12 @@ public class UserDtoValidator {
         Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
 
         if (!violations.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
             for (ConstraintViolation<UserDto> violation : violations) {
+                sb.append(violation.getMessage()).append("\n");
                 log.info(violation.getMessage());
             }
+            throw new ValidationException("Validation failed for userDto: \n" + sb.toString());
         }
     }
 }

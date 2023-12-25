@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(value = "/db")
-public class GetUsersServlet extends HttpServlet {
+public class InitDataBaseServlet extends HttpServlet {
 
     private DatabaseMigrationService migrationService;
 
@@ -26,7 +26,7 @@ public class GetUsersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         boolean success = migrationService.migrateDatabase();
         if (success) {
-            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setStatus(HttpServletResponse.SC_CREATED);
         } else {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "База данных не создана, исключение в migrationService.migrateDatabase(), так бывает, не расстраивайтесь");
         }
