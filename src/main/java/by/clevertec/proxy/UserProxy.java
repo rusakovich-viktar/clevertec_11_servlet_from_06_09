@@ -34,8 +34,6 @@ public class UserProxy {
 
     private Cache<Integer, User> userCache = configureCache();
     private final UserMapper userMapper = new UserMapper();
-//    private final UserMapperMapStruct userMapper = Mappers.getMapper(UserMapperMapStruct.class);
-
 
     @Pointcut("@annotation(by.clevertec.proxy.annotation.Cacheable)")
     public void getUser() {

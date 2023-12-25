@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private UserMapper userMapper = new UserMapper();
-    //    private UserMapperMapStruct userMapper = Mappers.getMapper(UserMapperMapStruct.class);
     private UserDtoValidator userDtoValidator;
     private UserDao userDao;
 
@@ -38,17 +37,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable
     public UserDto getUser(int id) {
+
         return Optional.ofNullable(userDao.get(id)).map(userMapper::convertToDto).orElse(null);
     }
 
     /**
-     * Возвращает список всех пользователей в виде UserDto.
+     * Получает список пользователей с учетом пагинации.
      *
-     * @return Список всех пользователей в виде UserDto.
+     * @param page     Номер страницы, начиная с 0.
+     * @param pageSize Количество пользователей на странице.
+     * @return Список пользователей на указанной странице, преобразованный в DTO.
      */
     @Override
-    public List<UserDto> getAllUsers() {
-        List<User> users = userDao.getAll();
+    public List<UserDto> getAllUsers(int page, int pageSize) {
+        List<User> users = userDao.getAll(page, pageSize);
         return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 
@@ -81,13 +83,18 @@ public class UserServiceImpl implements UserService {
     /**
      * Удаляет пользователя из базы данных.
      *
-     * @param userDto UserDto пользователя для удаления.
+     * @param id ID пользователя для удаления.
      */
+
     @Override
     @Cacheable
-    public void deleteUser(UserDto userDto) {
-        User user = userMapper.convertToEntity(userDto);
-        userDao.delete(user);
+    public void deleteUser(int id) {
+        User user = userDao.get(id);
+        if (user != null) {
+            userDao.delete(user);
+        } else {
+            throw new IllegalArgumentException("User with id " + id + " not found");
+        }
     }
 
 }

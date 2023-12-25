@@ -1,70 +1,115 @@
 package by.clevertec.dao.impl;
 
+import static by.clevertec.util.Constants.Messages.SAVE_USER_ERROR;
+
 import by.clevertec.dao.UserDao;
 import by.clevertec.entity.User;
-import java.util.ArrayList;
-import java.util.HashMap;
+import by.clevertec.util.Constants.Messages;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
-import java.util.Map;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 /**
- * Класс UserDaoImpl реализует интерфейс UserDao и предоставляет базовые операции CRUD (создание, чтение, обновление, удаление) для пользователей.
- * Этот класс использует Map<Integer, User> для хранения пользователей, где ключ - это ID пользователя, а значение - сам пользователь.
+ * Реализация интерфейса UserDao.
+ * Предоставляет базовые CRUD операции (создание, чтение, обновление, удаление) для пользователей.
  */
+@Log4j2
 @ToString
 public class UserDaoImpl implements UserDao {
-    private final Map<Integer, User> users = new HashMap<>();
+
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("by.clevertec.persist");
+    private final EntityManager em;
 
     /**
-     * Возвращает пользователя с указанным ID.
+     * Конструктор класса UserDaoImpl.
+     * Создает экземпляр EntityManager.
+     */
+    public UserDaoImpl() {
+        em = emf.createEntityManager();
+    }
+
+    /**
+     * Возвращает пользователя по указанному ID.
      *
      * @param id ID пользователя.
      * @return Пользователь с указанным ID или null, если такого пользователя нет.
      */
     @Override
     public User get(int id) {
-        return users.get(id);
+        em.getTransaction().begin();
+        User user = em.find(User.class, id);
+        em.getTransaction().commit();
+        return user;
     }
 
     /**
-     * Возвращает список всех пользователей.
+     * Получает список пользователей с учетом пагинации.
      *
-     * @return Список всех пользователей.
+     * @param page     Номер страницы, начиная с 0.
+     * @param pageSize Количество пользователей на странице.
+     * @return Список пользователей на указанной странице.
      */
-
     @Override
-    public List<User> getAll() {
-        return new ArrayList<>(users.values());
+    public List<User> getAll(int page, int pageSize) {
+        em.getTransaction().begin();
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class)
+                .setFirstResult(page * pageSize)
+                .setMaxResults(pageSize);
+        List<User> users = query.getResultList();
+        em.getTransaction().commit();
+        return users;
     }
 
     /**
-     * Сохраняет пользователя в Map.
+     * Сохраняет пользователя в базу данных.
      *
      * @param user Пользователь для сохранения.
+     * @return Сохраненный пользователь.
      */
-    @Override
-    public void save(User user) {
-        users.put(user.getId(), user);
+    public User save(User user) {
+        try {
+            em.persist(user);
+        } catch (Exception e) {
+            log.error(SAVE_USER_ERROR + e.getMessage());
+        }
+        return user;
     }
 
     /**
-     * Обновляет пользователя в Map.
+     * Обновляет пользователя в базе данных.
      *
      * @param user Пользователь для обновления.
+     * @return Обновленный пользователь.
      */
     @Override
-    public void update(User user) {
-        users.put(user.getId(), user);
+    public User update(User user) {
+        em.getTransaction().begin();
+        User updatedUser = em.merge(user);
+        em.getTransaction().commit();
+        return updatedUser;
     }
 
     /**
-     * Удаляет пользователя из Map.
+     * Удаляет пользователя из базы данных.
      *
      * @param user Пользователь для удаления.
      */
     @Override
     public void delete(User user) {
-        users.remove(user.getId());
+        em.getTransaction().begin();
+        em.remove(user);
+        em.getTransaction().commit();
+    }
+
+    /**
+     * Закрывает EntityManagerFactory.
+     */
+    @Override
+    public void close() {
+        emf.close();
     }
 }

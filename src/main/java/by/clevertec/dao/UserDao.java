@@ -6,11 +6,13 @@ import java.util.List;
 public interface UserDao {
     User get(int id);
 
-    List<User> getAll();
+    List<User> getAll(int page, int pageSize);
 
-    void save(User user);
+    User save(User user);
 
-    void update(User user);
+    User update(User user);
 
     void delete(User user);
+
+    void close();
 }
