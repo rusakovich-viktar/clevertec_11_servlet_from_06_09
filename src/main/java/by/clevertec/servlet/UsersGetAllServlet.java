@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Сервлет для обработки запросов, связанных со всеми пользователями.
@@ -32,10 +34,10 @@ public class UsersGetAllServlet extends HttpServlet {
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init();
-        userService = (UserService) config.getServletContext().getAttribute("userService");
-        objectMapper = new ObjectMapper();
-
+        super.init(config);
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        userService = springContext.getBean(UserService.class);
+        objectMapper = springContext.getBean(ObjectMapper.class);
     }
 
     /**

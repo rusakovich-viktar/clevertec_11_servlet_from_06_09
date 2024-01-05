@@ -4,7 +4,6 @@ import static by.clevertec.util.Constants.Messages.SAVE_USER_ERROR;
 
 import by.clevertec.dao.UserDao;
 import by.clevertec.entity.User;
-import by.clevertec.util.Constants.Messages;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;

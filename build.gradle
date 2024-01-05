@@ -56,6 +56,12 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
 
+    implementation 'org.springframework:spring-core:6.1.2'
+    implementation 'org.springframework:spring-context:6.1.2:'
+    implementation 'org.springframework:spring-beans:6.1.2'
+    implementation 'org.springframework:spring-webmvc:6.1.2'
+
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.flywaydb:flyway-core:9.22.0'
 
@@ -76,6 +82,9 @@ dependencies {
     implementation 'com.itextpdf:itextpdf:5.5.13.3'
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+
+
 
 }
 
