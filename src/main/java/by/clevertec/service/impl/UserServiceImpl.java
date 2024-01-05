@@ -3,7 +3,6 @@ package by.clevertec.service.impl;
 import by.clevertec.dao.UserDao;
 import by.clevertec.dto.UserDto;
 import by.clevertec.entity.User;
-import by.clevertec.mapper.UserFactory;
 import by.clevertec.mapper.UserMapper;
 import by.clevertec.proxy.annotation.Cacheable;
 import by.clevertec.service.UserService;
@@ -11,8 +10,7 @@ import by.clevertec.validation.UserDtoValidator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Класс UserServiceImpl реализует интерфейс UserService и предоставляет базовые операции CRUD (создание, чтение, обновление, удаление) для пользователей.
@@ -20,13 +18,12 @@ import lombok.NoArgsConstructor;
  * Кроме того, он использует UserDtoValidator для проверки UserDto перед сохранением или обновлением.
  */
 
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserMapper userMapper = new UserMapper();
-    private UserDtoValidator userDtoValidator;
-    private UserDao userDao;
+    private final UserMapper userMapper;
+    private final UserDtoValidator userDtoValidator;
+    private final UserDao userDao;
 
     /**
      * Возвращает UserDto для пользователя с указанным ID.
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable
     public void saveUser(UserDto userDto) {
         userDtoValidator.validate(userDto);
-        User user = UserFactory.createUser(userDto);
+        User user = userMapper.convertToEntity(userDto);
         userDao.save(user);
     }
 

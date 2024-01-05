@@ -7,13 +7,14 @@ import by.clevertec.dto.UserDto;
 import by.clevertec.entity.User;
 import by.clevertec.mapper.UserMapper;
 import by.clevertec.util.YamlReader;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 /**
  * Класс {@code UserProxy} представляет собой прокси для работы с пользователями.
@@ -29,11 +30,12 @@ import org.aspectj.lang.annotation.Pointcut;
  */
 @Aspect
 @Log4j2
-@NoArgsConstructor
+@RequiredArgsConstructor
+@Component
 public class UserProxy {
 
     private Cache<Integer, User> userCache = configureCache();
-    private final UserMapper userMapper = new UserMapper();
+    private final UserMapper userMapper;
 
     @Pointcut("@annotation(by.clevertec.proxy.annotation.Cacheable)")
     public void getUser() {

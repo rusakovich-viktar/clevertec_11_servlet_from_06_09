@@ -26,6 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Сервлет для генерации PDF с информацией о пользователях.
@@ -44,8 +46,9 @@ public class UserPdfServlet extends HttpServlet {
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init();
-        userService = (UserService) config.getServletContext().getAttribute("userService");
+        super.init(config);
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        userService = springContext.getBean(UserService.class);
 
     }
 

@@ -1,8 +1,6 @@
 package by.clevertec.servlet;
 
 import static by.clevertec.util.Constants.Attributes.APPLICATION_JSON;
-import static by.clevertec.util.Constants.Attributes.APPLICATION_PDF;
-import static by.clevertec.util.Constants.Attributes.USER_SERVICE;
 import static by.clevertec.util.Constants.Messages.AN_ERROR_OCCURRED_WHILE_CREATING_THE_USER;
 import static by.clevertec.util.Constants.Messages.INVALID_USER_ID;
 import static by.clevertec.util.Constants.Messages.MISSING_USER_ID;
@@ -18,6 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Сервлет для обработки запросов, связанных с пользователями.
@@ -35,10 +35,10 @@ public class UsersServlet extends HttpServlet {
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
-        super.init();
-        userService = (UserService) config.getServletContext().getAttribute(USER_SERVICE);
-        objectMapper = new ObjectMapper();
-
+        super.init(config);
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        userService = springContext.getBean(UserService.class);
+        objectMapper = springContext.getBean(ObjectMapper.class);
     }
 
     /**
